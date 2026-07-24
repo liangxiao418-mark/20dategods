@@ -29,7 +29,7 @@
         <div class="desktop-hero-art" aria-label="20日符图腾转盘">
           <div class="orbit" id="home-orbit">
             <div class="orbit-ring"></div>
-            <div class="orbit-center demo-medallion"><img src="/static/img/date-gods/full/ollin.png" alt="奥林日期守护神"><small>20 DAY SIGNS</small></div>
+            <div class="orbit-center demo-medallion"><img src="{{ url_for('static', filename='img/date-gods/full/ollin.png') }}" alt="奥林日期守护神"><small>20 DAY SIGNS</small></div>
           </div>
         </div>
       </div>
@@ -64,7 +64,7 @@
       <div class="content-panel ornate-panel loading-panel">
         <div class="orbit loading-orbit" id="loading-orbit">
           <div class="orbit-ring"></div>
-          <div class="orbit-center demo-medallion"><img id="loading-symbol-image" src="/static/img/date-gods/full/ocelotl.png" alt="正在匹配日期守护神"><small>20日符</small></div>
+          <div class="orbit-center demo-medallion"><img id="loading-symbol-image" src="{{ url_for('static', filename='img/date-gods/full/ocelotl.png') }}" alt="正在匹配日期守护神"><small>20日符</small></div>
         </div>
         <div class="eyebrow">正在匹配20日符</div>
         <h2>正在定位你的生日</h2>
@@ -86,7 +86,7 @@
             <strong id="result-display-name" hidden></strong><span id="result-personal-copy">你的生日守护图腾</span>
           </div>
           <div class="guardian-crowd" id="guardian-crowd" aria-hidden="true"></div>
-          <div class="hero-medallion" id="result-medallion"><img id="result-icon-image" src="/static/img/date-gods/full/ocelotl.png" alt="豹日期守护神"></div>
+          <div class="hero-medallion" id="result-medallion"><img id="result-icon-image" src="{{ url_for('static', filename='img/date-gods/full/ocelotl.png') }}" alt="豹日期守护神"></div>
         </div>
         <div class="result-copy">
           <h2><span id="result-name-zh">美洲豹</span> · <span id="result-name-nahuatl">Ocelotl</span></h2>
@@ -115,7 +115,7 @@
           </header>
           <div class="bracelet-visual">
             <div class="cord cord-left"></div><div class="cord cord-right"></div>
-            <div class="product-medallion"><img id="product-icon-image" src="/static/img/date-gods/full/ocelotl.png" alt="豹日期守护神"><small id="product-medallion-no">18</small></div>
+            <div class="product-medallion"><img id="product-icon-image" src="{{ url_for('static', filename='img/date-gods/full/ocelotl.png') }}" alt="豹日期守护神"><small id="product-medallion-no">18</small></div>
           </div>
           <p class="photo-note">Demo 产品图占位 · 可替换为你的实拍图</p>
         </div>
@@ -145,7 +145,7 @@
         </header>
         <div class="share-preview" id="share-preview">
           <span class="poster-label">BIRTH TOTEM · 20</span>
-          <div class="share-medallion"><img id="share-icon-image" src="/static/img/date-gods/full/ocelotl.png" alt="豹日期守护神"></div>
+          <div class="share-medallion"><img id="share-icon-image" src="{{ url_for('static', filename='img/date-gods/full/ocelotl.png') }}" alt="豹日期守护神"></div>
           <p>我的生日图腾是</p>
           <h2><span id="share-name-zh">美洲豹</span> · <span id="share-name-nahuatl">Ocelotl</span></h2>
           <p class="share-transliteration" id="share-name-transliteration">奥塞洛特尔</p>
@@ -179,7 +179,7 @@
           <strong>完整生日历法</strong><span></span>
         </header>
         <div class="mini-result">
-          <div class="mini-medallion"><img id="calendar-mini-image" src="/static/img/date-gods/icon/ocelotl.png" alt="豹日期守护神"></div>
+          <div class="mini-medallion"><img id="calendar-mini-image" src="{{ url_for('static', filename='img/date-gods/icon/ocelotl.png') }}" alt="豹日期守护神"></div>
           <div><small>主日符</small><h2 id="calendar-signature">5 Ocelotl</h2><p><span id="calendar-name-transliteration">奥塞洛特尔</span> · <span id="calendar-product-no">18</span>号 · <span id="calendar-product-name">美洲豹款</span></p></div>
         </div>
         <details class="calendar-card" open>
@@ -239,6 +239,7 @@
     <button class="primary-button dialog-close-action" type="button">完成</button>
   </dialog>
   <div class="toast" id="toast" role="status" hidden></div>
+  <script>window.APP_BASE = {{ request.script_root|tojson }};</script>
   <script src="{{ url_for('static', filename='js/app.js', v='20260724d') }}" defer></script>
 </body>
 </html>

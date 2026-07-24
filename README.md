@@ -40,10 +40,32 @@ python app.py
    ```
 
 3. 启动：`docker compose up -d --build`
-4. 在腾讯云防火墙放行 80 和 443 端口。
+4. 容器只监听本机的 `127.0.0.1:8000`；在服务器现有 Nginx 中配置 HTTPS 与反向代理。
 5. 域名解析到服务器公网 IP；正式使用建议再配置 HTTPS 证书。
 
 SQLite 数据通过 `./data:/app/data` 持久化，升级容器不会丢失产品资料。上线前请备份 `data/maya_calendar.db`。
+
+### 部署到 `/maya20dategods/` 子路径
+
+应用通过 Nginx 的 `X-Forwarded-Prefix` 自动识别部署前缀。因此，Nginx 必须将子路径从上游请求中移除，并传入该请求头；不要在 Flask 路由中重复添加 `/maya20dategods`。以下配置可加入 `kyun-exhibition.com` 的 HTTPS `server` 块：
+
+```nginx
+location = /maya20dategods {
+    return 301 /maya20dategods/;
+}
+
+location /maya20dategods/ {
+    # 尾部斜杠会将 /maya20dategods/ 从转发给 Flask 的 URI 中移除。
+    proxy_pass http://127.0.0.1:8000/;
+    proxy_set_header Host $host;
+    proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+    proxy_set_header X-Forwarded-Proto $scheme;
+    proxy_set_header X-Forwarded-Host $host;
+    proxy_set_header X-Forwarded-Prefix /maya20dategods;
+}
+```
+
+完成 Nginx 配置后，访问 `https://kyun-exhibition.com/maya20dategods/`。本地开发不设置该请求头，仍可直接使用 `http://127.0.0.1:8000/`。
 
 ## 替换真实产品素材
 

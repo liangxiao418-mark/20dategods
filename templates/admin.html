@@ -10,7 +10,7 @@
   <main class="admin-shell">
     <header class="admin-header">
       <div><p class="step-label">DEMO ADMIN</p><h1>20款产品管理</h1><p>修改价格、库存、材质、关键词和产品故事。</p></div>
-      <a class="secondary-button" href="/" style="display:inline-grid;place-items:center;text-decoration:none;padding:0 22px;width:auto">返回H5</a>
+      <a class="secondary-button" href="{{ url_for('index') }}" style="display:inline-grid;place-items:center;text-decoration:none;padding:0 22px;width:auto">返回H5</a>
     </header>
     <section class="admin-toolbar">
       <label>管理令牌<input id="admin-token" class="text-input" type="password" value="demo-admin"></label>
@@ -20,6 +20,7 @@
     <div id="admin-grid" class="admin-grid"></div>
   </main>
   <div class="toast" id="toast" role="status" hidden></div>
+  <script>window.APP_BASE = {{ request.script_root|tojson }};</script>
   <script src="{{ url_for('static', filename='js/admin.js', v='20260724d') }}" defer></script>
 </body>
 </html>

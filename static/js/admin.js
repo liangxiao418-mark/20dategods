@@ -1,4 +1,6 @@
 (() => {
+  const APP_BASE = (window.APP_BASE || "").replace(/\/$/, "");
+  const withBase = (path) => `${APP_BASE}${path.startsWith("/") ? path : `/${path}`}`;
   const grid = document.querySelector("#admin-grid");
   const status = document.querySelector("#admin-status");
   const token = document.querySelector("#admin-token");
@@ -30,7 +32,7 @@
   async function load() {
     status.textContent = "正在读取产品……";
     try {
-      const data = await request("/api/products");
+      const data = await request(withBase("/api/products"));
       grid.replaceChildren(...data.items.map(card)); status.textContent = `已载入 ${data.items.length} 款产品`;
     } catch (err) { status.textContent = err.message; }
   }
@@ -44,7 +46,7 @@
       stock_status: form.elements.stock_status.value, product_image: form.elements.product_image.value.trim() || null
     };
     try {
-      await request(`/api/admin/products/${no}`, { method: "PUT", headers: { "Content-Type": "application/json", "X-Admin-Token": token.value }, body: JSON.stringify(body) });
+      await request(withBase(`/api/admin/products/${no}`), { method: "PUT", headers: { "Content-Type": "application/json", "X-Admin-Token": token.value }, body: JSON.stringify(body) });
       status.textContent = `${no} 号已保存`;
     } catch (err) { status.textContent = err.message; }
   }
