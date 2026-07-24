@@ -1,0 +1,244 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#8c321f">
+  <meta name="description" content="输入生日，找到唯一对应的中美洲历法文创产品。">
+  <title>生日图腾 H5 Demo</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/app.css', v='20260724d') }}">
+</head>
+<body>
+  <div class="page-texture" aria-hidden="true"></div>
+  <main id="app" class="app-shell" aria-live="polite">
+
+    <section class="view view-home is-active" data-view="home">
+      <div class="home-grid ornate-panel">
+        <div class="home-copy">
+          <header class="brand-bar">
+            <a class="brand" href="#home" aria-label="返回首页"><span class="brand-dot">◉</span><span>你的品牌 LOGO</span></a>
+            <button class="icon-button" type="button" data-go="about" aria-label="文化说明">☰</button>
+          </header>
+          <div class="mobile-hero-art" id="mobile-hero-art" aria-label="日期守护神图腾组合"></div>
+          <div class="eyebrow">中美洲历法生日体验</div>
+          <h1>输入生日<br><em>找到属于你的图腾</em></h1>
+          <p class="lead">20款文创产品中，有一款只为你的生日而来。</p>
+          <button class="primary-button" type="button" data-go="birthday">开启我的生日图腾 <span>→</span></button>
+          <p class="privacy-line">生日仅用于本次换算 · 无需注册</p>
+        </div>
+        <div class="desktop-hero-art" aria-label="20日符图腾转盘">
+          <div class="orbit" id="home-orbit">
+            <div class="orbit-ring"></div>
+            <div class="orbit-center demo-medallion"><img src="/static/img/date-gods/full/ollin.png" alt="奥林日期守护神"><small>20 DAY SIGNS</small></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="view" data-view="birthday" hidden>
+      <div class="content-panel ornate-panel compact-panel">
+        <header class="view-header">
+          <button class="icon-button back-button" type="button" data-go="home" aria-label="返回首页">‹</button>
+          <strong>选择生日</strong><span></span>
+        </header>
+        <div class="step-label">STEP 01</div>
+        <h2>请选择你的出生日期</h2>
+        <p class="supporting">我们采用统一历法口径，为你找到唯一对应产品。</p>
+
+        <form id="birthday-form" class="birthday-form">
+          <div class="date-picker" aria-label="出生日期">
+            <label>年份<select id="birth-year" name="year" required></select></label>
+            <label>月份<select id="birth-month" name="month" required></select></label>
+            <label>日期<select id="birth-day" name="day" required></select></label>
+          </div>
+          <label class="field-label" for="display-name">姓名或昵称（选填）</label>
+          <input id="display-name" class="text-input" type="text" maxlength="30" placeholder="用于结果页和分享卡署名" autocomplete="name">
+          <div class="privacy-notice"><span>▣</span><p>生日默认只在本次计算中使用，不会保存到数据库。</p></div>
+          <p class="form-error" id="date-error" role="alert"></p>
+          <button class="primary-button" type="submit">查看我的生日图腾</button>
+        </form>
+      </div>
+    </section>
+
+    <section class="view" data-view="loading" hidden>
+      <div class="content-panel ornate-panel loading-panel">
+        <div class="orbit loading-orbit" id="loading-orbit">
+          <div class="orbit-ring"></div>
+          <div class="orbit-center demo-medallion"><img id="loading-symbol-image" src="/static/img/date-gods/full/ocelotl.png" alt="正在匹配日期守护神"><small>20日符</small></div>
+        </div>
+        <div class="eyebrow">正在匹配20日符</div>
+        <h2>正在定位你的生日</h2>
+        <p class="supporting">公历日期 → 20日循环 → 唯一产品</p>
+        <div class="loading-track"><span></span><i></i></div>
+        <p class="privacy-line">找到属于你的那一款……</p>
+      </div>
+    </section>
+
+    <section class="view" data-view="result" hidden>
+      <div class="result-layout ornate-panel">
+        <div class="result-visual">
+          <header class="view-header transparent-header">
+            <button class="icon-button back-button" type="button" data-go="birthday" aria-label="重新选择生日">‹</button>
+            <strong>传递结果</strong>
+            <button class="text-button" type="button" data-go="share">分享</button>
+          </header>
+          <div class="eyebrow result-personal-title">
+            <strong id="result-display-name" hidden></strong><span id="result-personal-copy">你的生日守护图腾</span>
+          </div>
+          <div class="guardian-crowd" id="guardian-crowd" aria-hidden="true"></div>
+          <div class="hero-medallion" id="result-medallion"><img id="result-icon-image" src="/static/img/date-gods/full/ocelotl.png" alt="豹日期守护神"></div>
+        </div>
+        <div class="result-copy">
+          <h2><span id="result-name-zh">美洲豹</span> · <span id="result-name-nahuatl">Ocelotl</span></h2>
+          <p class="name-transliteration" id="result-name-transliteration">奥塞洛特尔</p>
+          <p class="keywords" id="result-keywords">勇者无畏 · 守护辟邪</p>
+          <div class="result-facts">
+            <div><span>对应产品</span><strong><b id="result-product-no">18</b>号</strong></div>
+            <div><span>历法签名</span><strong id="result-signature">5 Ocelotl</strong></div>
+          </div>
+          <div class="action-stack">
+            <button class="primary-button" type="button" data-go="product">查看<span id="result-button-no">18</span>号产品</button>
+            <button class="secondary-button" type="button" data-go="share">生成我的生日卡</button>
+            <button class="link-button" type="button" data-go="calendar">查看完整生日历法 ›</button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="view" data-view="product" hidden>
+      <div class="product-layout ornate-panel">
+        <div class="product-photo" id="product-photo">
+          <header class="view-header dark-header">
+            <button class="icon-button back-button" type="button" data-go="result" aria-label="返回结果">‹</button>
+            <strong><span id="product-title-no">18</span>号产品</strong>
+            <button class="icon-button" type="button" aria-label="收藏">♡</button>
+          </header>
+          <div class="bracelet-visual">
+            <div class="cord cord-left"></div><div class="cord cord-right"></div>
+            <div class="product-medallion"><img id="product-icon-image" src="/static/img/date-gods/full/ocelotl.png" alt="豹日期守护神"><small id="product-medallion-no">18</small></div>
+          </div>
+          <p class="photo-note">Demo 产品图占位 · 可替换为你的实拍图</p>
+        </div>
+        <div class="product-detail">
+          <div class="eyebrow">你的生日款</div>
+          <h2><span id="product-name-zh">美洲豹</span> · <span id="product-name-nahuatl">Ocelotl</span></h2>
+          <p class="name-transliteration" id="product-name-transliteration">奥塞洛特尔</p>
+          <p id="product-story">灵感来自美洲豹日符。象征勇气、敏锐与守护。</p>
+          <div class="product-meta">
+            <span>◇ 材质：<b id="product-material">黄铜镀金 / 皮绳</b></span>
+            <span id="product-stock">□ 状态：现货</span>
+          </div>
+          <div class="product-cta">
+            <div><small>现场价</small><strong id="product-price">请咨询</strong></div>
+            <button class="primary-button" type="button" id="show-clerk-button">向店员出示<span id="clerk-product-no">18</span>号</button>
+          </div>
+          <button class="link-button" type="button" data-go="calendar">查看完整历法与生日图形</button>
+        </div>
+      </div>
+    </section>
+
+    <section class="view" data-view="share" hidden>
+      <div class="content-panel ornate-panel share-layout">
+        <header class="view-header">
+          <button class="icon-button back-button" type="button" data-go="result" aria-label="返回结果">‹</button>
+          <strong>生日图腾卡</strong><span></span>
+        </header>
+        <div class="share-preview" id="share-preview">
+          <span class="poster-label">BIRTH TOTEM · 20</span>
+          <div class="share-medallion"><img id="share-icon-image" src="/static/img/date-gods/full/ocelotl.png" alt="豹日期守护神"></div>
+          <p>我的生日图腾是</p>
+          <h2><span id="share-name-zh">美洲豹</span> · <span id="share-name-nahuatl">Ocelotl</span></h2>
+          <p class="share-transliteration" id="share-name-transliteration">奥塞洛特尔</p>
+          <div class="poster-pill"><span id="share-product-no">18</span>号产品 · <span id="share-signature">5 Ocelotl</span></div>
+          <strong id="share-keywords">勇者无畏 / 守护辟邪</strong>
+          <section class="share-calendar" aria-label="完整生日历法">
+            <div class="share-calendar-title"><span>完整生日历法</span><i></i></div>
+            <div class="share-long-count">
+              <small>长纪历 Long Count</small>
+              <strong id="share-long-count-text">13 · 0 · 13 · 13 · 14</strong>
+              <div class="share-glyph-numbers" id="share-long-count-glyphs"></div>
+              <p>Baktun · Katun · Tun · Winal · Kin</p>
+            </div>
+            <div class="share-calendar-row"><span>卓尔金历 Tzolk'in</span><strong id="share-tzolkin-text">5 Ix</strong></div>
+            <div class="share-calendar-row"><span>Haab 历</span><strong id="share-haab-text">7 Xul</strong></div>
+            <div class="share-calendar-row"><span>夜神 Night Lord</span><strong id="share-night-lord-text">G4</strong></div>
+            <div class="share-calendar-row"><span>计算口径</span><strong>GMT 584283</strong></div>
+          </section>
+          <footer><span id="share-date">07.15</span><span class="fake-qr">⌗</span></footer>
+        </div>
+        <label class="toggle-row"><input type="checkbox" id="hide-year" checked><span>隐藏出生年份</span></label>
+        <button class="primary-button" type="button" id="download-card">↓ 保存图片</button>
+        <canvas id="share-canvas" width="1080" height="2200" hidden></canvas>
+      </div>
+    </section>
+
+    <section class="view" data-view="calendar" hidden>
+      <div class="content-panel ornate-panel calendar-layout">
+        <header class="view-header">
+          <button class="icon-button back-button" type="button" data-go="result" aria-label="返回结果">‹</button>
+          <strong>完整生日历法</strong><span></span>
+        </header>
+        <div class="mini-result">
+          <div class="mini-medallion"><img id="calendar-mini-image" src="/static/img/date-gods/icon/ocelotl.png" alt="豹日期守护神"></div>
+          <div><small>主日符</small><h2 id="calendar-signature">5 Ocelotl</h2><p><span id="calendar-name-transliteration">奥塞洛特尔</span> · <span id="calendar-product-no">18</span>号 · <span id="calendar-product-name">美洲豹款</span></p></div>
+        </div>
+        <details class="calendar-card" open>
+          <summary><span>长纪历 Long Count</span><strong id="long-count-text">13 · 0 · 13 · 13 · 14</strong></summary>
+          <div class="glyph-numbers" id="long-count-glyphs"></div>
+          <p>Baktun · Katun · Tun · Winal · Kin</p>
+        </details>
+        <details class="calendar-card"><summary><span>卓尔金历 Tzolk'in</span><strong id="tzolkin-text">5 Ix</strong></summary><p>20个日符与1-13日序数分别循环组成。</p></details>
+        <details class="calendar-card"><summary><span>Haab 历</span><strong id="haab-text">7 Xul</strong></summary><p>365天的太阳历，由18个20天月份和Wayeb'组成。</p></details>
+        <details class="calendar-card"><summary><span>夜神 Night Lord</span><strong id="night-lord-text">G4</strong></summary><p>九位夜神按日循环，作为完整历法信息的补充。</p></details>
+        <details class="calendar-card"><summary><span>计算口径</span><strong>GMT 584283</strong></summary><p>不同相关系数或历法传统可能产生少量日期差异。</p></details>
+        <button class="primary-button" type="button" data-go="product">返回我的<span id="calendar-button-no">18</span>号产品</button>
+      </div>
+    </section>
+
+    <section class="view" data-view="gallery" hidden>
+      <div class="content-panel ornate-panel gallery-layout">
+        <header class="view-header">
+          <button class="icon-button back-button" type="button" data-go="home" aria-label="返回首页">‹</button>
+          <strong>20日符图鉴</strong><span></span>
+        </header>
+        <h2>完整20款系列</h2>
+        <p class="supporting">你的生日款会被高亮，浏览其他款不会改变结果。</p>
+        <div class="product-grid" id="product-grid"></div>
+        <p class="gallery-note">● 高亮款为当前生日唯一对应产品</p>
+      </div>
+    </section>
+
+    <section class="view" data-view="about" hidden>
+      <div class="content-panel ornate-panel about-layout">
+        <header class="view-header">
+          <button class="icon-button back-button" type="button" data-go="home" aria-label="返回首页">‹</button>
+          <strong>关于这次体验</strong><span></span>
+        </header>
+        <div class="eyebrow">文化与口径</div>
+        <h2>我们如何找到<br><em>你的生日款？</em></h2>
+        <p>公历生日会先被换算为连续日数，再对应到20日符循环。产品只由日符决定。</p>
+        <div class="about-flow">
+          <div><b>①</b><span>公历生日</span></div><i>↓</i>
+          <div><b>②</b><span>GMT 584283</span></div><i>↓</i>
+          <div class="active"><b>③</b><span>唯一20日符</span></div>
+        </div>
+        <details open><summary>为什么其他网站可能不同？</summary><p>不同相关系数或日期处理方式，可能让结果出现少量日期差异。</p></details>
+        <details><summary>产品编号和历法数字一样吗？</summary><p>不一样。1-20是产品编号；1-13是独立循环的历法签名。</p></details>
+        <details><summary>会保存我的生日吗？</summary><p>默认本地使用，不保存完整生日；匿名统计默认关闭。</p></details>
+        <button class="secondary-button" type="button" data-go="gallery">查看完整20款图鉴</button>
+        <p class="disclaimer">用于文化创意与历法知识展示，不构成人生决策建议。</p>
+      </div>
+    </section>
+  </main>
+
+  <dialog id="clerk-dialog" class="clerk-dialog">
+    <button class="dialog-close" type="button" aria-label="关闭">×</button>
+    <p>请向店员出示</p>
+    <strong><span id="clerk-big-no">18</span>号</strong>
+    <h2 id="clerk-big-name">美洲豹 · 奥塞洛特尔 · Ocelotl</h2>
+    <button class="primary-button dialog-close-action" type="button">完成</button>
+  </dialog>
+  <div class="toast" id="toast" role="status" hidden></div>
+  <script src="{{ url_for('static', filename='js/app.js', v='20260724d') }}" defer></script>
+</body>
+</html>

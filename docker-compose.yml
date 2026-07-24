@@ -1,0 +1,22 @@
+services:
+  birthday-totem:
+    build: .
+    restart: unless-stopped
+    environment:
+      MAYA_DB_PATH: /app/data/maya_calendar.db
+      MAYA_ADMIN_TOKEN: ${MAYA_ADMIN_TOKEN:-please-change-this-token}
+      MAYA_ENABLE_ANALYTICS: ${MAYA_ENABLE_ANALYTICS:-0}
+    volumes:
+      - ./data:/app/data
+    ports:
+      - "127.0.0.1:8000:8000"
+
+  nginx:
+    image: nginx:1.27-alpine
+    restart: unless-stopped
+    depends_on:
+      - birthday-totem
+    ports:
+      - "80:80"
+    volumes:
+      - ./deploy/nginx.conf:/etc/nginx/conf.d/default.conf:ro

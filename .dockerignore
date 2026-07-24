@@ -1,0 +1,9 @@
+.git
+.vendor
+__pycache__
+*.pyc
+tests
+work
+outputs
+data/*.db
+.env

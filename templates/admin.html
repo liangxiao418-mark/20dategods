@@ -1,0 +1,25 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>生日图腾 Demo 管理页</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/app.css', v='20260724d') }}">
+</head>
+<body class="admin-page">
+  <main class="admin-shell">
+    <header class="admin-header">
+      <div><p class="step-label">DEMO ADMIN</p><h1>20款产品管理</h1><p>修改价格、库存、材质、关键词和产品故事。</p></div>
+      <a class="secondary-button" href="/" style="display:inline-grid;place-items:center;text-decoration:none;padding:0 22px;width:auto">返回H5</a>
+    </header>
+    <section class="admin-toolbar">
+      <label>管理令牌<input id="admin-token" class="text-input" type="password" value="demo-admin"></label>
+      <button id="load-products" class="primary-button" type="button">读取产品</button>
+      <span id="admin-status">线上部署前请务必修改默认令牌。</span>
+    </section>
+    <div id="admin-grid" class="admin-grid"></div>
+  </main>
+  <div class="toast" id="toast" role="status" hidden></div>
+  <script src="{{ url_for('static', filename='js/admin.js', v='20260724d') }}" defer></script>
+</body>
+</html>
