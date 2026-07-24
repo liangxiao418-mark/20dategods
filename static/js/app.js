@@ -1,6 +1,8 @@
 (() => {
   "use strict";
 
+  const APP_BASE = (window.APP_BASE || "").replace(/\/$/, "");
+  const withBase = (path) => `${APP_BASE}${path.startsWith("/") ? path : `/${path}`}`;
   const $ = (selector, root = document) => root.querySelector(selector);
   const $$ = (selector, root = document) => [...root.querySelectorAll(selector)];
   const state = { products: [], result: null, name: "" };
@@ -19,7 +21,7 @@
   }
 
   function localDateGodUrl(product, size = "icon") {
-    return `/static/img/date-gods/${size}/${product.sign_key}.png`;
+    return withBase(`/static/img/date-gods/${size}/${product.sign_key}.png`);
   }
 
   function dateGodUrl(product, size = "icon") {
@@ -262,7 +264,7 @@
     route("loading");
     try {
       const started = performance.now();
-      const data = await getJSON("/api/calculate", {
+      const data = await getJSON(withBase("/api/calculate"), {
         method: "POST", headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ birthDate, name })
       });
@@ -437,7 +439,7 @@
   async function init() {
     initDatePicker();
     try {
-      state.products = (await getJSON("/api/products")).items;
+      state.products = (await getJSON(withBase("/api/products"))).items;
       buildOrbit($("#home-orbit")); buildOrbit($("#loading-orbit")); buildMobileHero(); renderGallery();
     } catch (err) { showToast(err.message); }
 

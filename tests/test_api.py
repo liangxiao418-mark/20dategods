@@ -37,6 +37,40 @@ class ApiTests(unittest.TestCase):
         css_response.close()
         js_response.close()
 
+    def test_root_path_deployment_uses_root_urls(self):
+        page = self.client.get("/")
+        body = page.get_data(as_text=True)
+        self.assertEqual(page.status_code, 200)
+        self.assertIn('window.APP_BASE = "";', body)
+        self.assertIn('src="/static/js/app.js?', body)
+        self.assertEqual(self.client.get("/api/products").status_code, 200)
+
+    def test_forwarded_prefix_generates_prefixed_urls_and_api_requests(self):
+        headers = {"X-Forwarded-Prefix": "/maya20dategods"}
+        page = self.client.get("/", headers=headers)
+        admin_page = self.client.get("/admin", headers=headers)
+        body = page.get_data(as_text=True)
+        admin_body = admin_page.get_data(as_text=True)
+
+        self.assertEqual(page.status_code, 200)
+        self.assertIn('window.APP_BASE = "/maya20dategods";', body)
+        self.assertIn('/maya20dategods/static/js/app.js?', body)
+        self.assertIn('/maya20dategods/static/img/date-gods/full/ollin.png', body)
+        self.assertIn('window.APP_BASE = "/maya20dategods";', admin_body)
+        self.assertIn('href="/maya20dategods/"', admin_body)
+
+        app_js_response = self.client.get("/static/js/app.js")
+        admin_js_response = self.client.get("/static/js/admin.js")
+        app_js = app_js_response.get_data(as_text=True)
+        admin_js = admin_js_response.get_data(as_text=True)
+        app_js_response.close()
+        admin_js_response.close()
+        self.assertIn('getJSON(withBase("/api/calculate")', app_js)
+        self.assertIn('getJSON(withBase("/api/products"))', app_js)
+        self.assertIn('return withBase(`/static/img/date-gods/', app_js)
+        self.assertIn('request(withBase("/api/products"))', admin_js)
+        self.assertIn('request(withBase(`/api/admin/products/${no}`)', admin_js)
+
     def test_all_date_god_assets_are_served(self):
         sign_keys = [
             "ollin", "tecpatl", "quiahuitl", "xochitl", "cipactli",

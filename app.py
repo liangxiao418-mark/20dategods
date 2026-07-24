@@ -12,6 +12,7 @@ if VENDOR.exists():
     sys.path.insert(0, str(VENDOR))
 
 from flask import Flask, jsonify, render_template, request
+from werkzeug.middleware.proxy_fix import ProxyFix
 
 from database import DEFAULT_DB_PATH, connect, init_db, row_to_product, utc_now
 from maya_calendar import convert_birth_date
@@ -19,6 +20,16 @@ from maya_calendar import convert_birth_date
 
 def create_app(test_config: dict | None = None) -> Flask:
     app = Flask(__name__)
+    # Trust the single reverse proxy in front of this application.  In
+    # particular, X-Forwarded-Prefix lets Flask generate URLs beneath the
+    # proxy's mounted path without making that path part of our routes.
+    app.wsgi_app = ProxyFix(
+        app.wsgi_app,
+        x_for=1,
+        x_proto=1,
+        x_host=1,
+        x_prefix=1,
+    )
     app.config.from_mapping(
         DATABASE=os.environ.get("MAYA_DB_PATH", str(DEFAULT_DB_PATH)),
         ADMIN_TOKEN=os.environ.get("MAYA_ADMIN_TOKEN", "demo-admin"),
