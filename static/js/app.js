@@ -6,6 +6,7 @@
   const $ = (selector, root = document) => root.querySelector(selector);
   const $$ = (selector, root = document) => [...root.querySelectorAll(selector)];
   const state = { products: [], result: null, name: "" };
+  const QR_CODE_URL = "https://maya-1408948459.cos.ap-guangzhou.myqcloud.com/20_dategods_qrcod_h5/20date_gods_QR_code%281%29.png";
   const accents = { red: "#96321e", teal: "#287871", blue: "#326c84", gold: "#b47a22", green: "#47784c", sand: "#8c694d" };
 
   async function getJSON(url, options) {
@@ -353,9 +354,12 @@
   async function downloadCard() {
     if (!state.result) return;
     const canvas = $("#share-canvas"), ctx = canvas.getContext("2d"), data = state.result, p = data.product;
-    let guardianImage;
+    let guardianImage, qrImage;
     try {
-      guardianImage = await loadImage(dateGodUrl(p, "full"), localDateGodUrl(p, "full"));
+      [guardianImage, qrImage] = await Promise.all([
+        loadImage(dateGodUrl(p, "full"), localDateGodUrl(p, "full")),
+        loadImage(QR_CODE_URL)
+      ]);
     } catch (error) {
       showToast(error.message);
       return;
@@ -423,13 +427,14 @@
     ctx.strokeStyle = "#3b1d17";
     ctx.lineWidth = 6;
     ctx.fillStyle = "#fff";
-    ctx.fillRect(W - 222, 1930, 130, 130);
-    ctx.strokeRect(W - 222, 1930, 130, 130);
+    ctx.fillRect(W - 302, 1858, 220, 220);
+    ctx.strokeRect(W - 302, 1858, 220, 220);
     ctx.setLineDash([]);
+    ctx.drawImage(qrImage, W - 287, 1873, 190, 190);
     ctx.textAlign = "center";
-    ctx.fillStyle = "#3b1d17";
-    ctx.font = "64px sans-serif";
-    ctx.fillText("⌗", W - 157, 2017);
+    ctx.fillStyle = "rgba(255,231,174,.78)";
+    ctx.font = "24px sans-serif";
+    ctx.fillText("玛雅历法档案 · 坤远文博提供技术支持", W / 2, 2118);
     const link = document.createElement("a");
     link.download = `生日图腾-${p.product_no}号-${p.name_nahuatl}.png`;
     link.href = canvas.toDataURL("image/png"); link.click();
